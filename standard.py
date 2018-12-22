@@ -1,5 +1,4 @@
 import chess
-from datetime import datetime
 
 board = chess.Board()
 
@@ -127,7 +126,6 @@ while not board.is_game_over():
     if not board.is_game_over() and move.lower() != 'undo':
         moves = getMoves()
         move = getBestmove()
-        print(move)
         board.push(move)
 
         print()
@@ -139,25 +137,3 @@ else:
         print('1-0')
     else:
         print('0-1')
-"""var
-        minimaxRoot = function(depth, game, isMaximisingPlayer)
-        {
-
-            var
-        newGameMoves = game.ugly_moves();
-        var bestMove = -9999;
-        var
-        bestMoveFound;
-
-        for (var i = 0; i < newGameMoves.length; i++) {
-            var newGameMove = newGameMoves[i];
-        game.ugly_move(newGameMove);
-        var value = minimax(depth - 1, game, !isMaximisingPlayer);
-        game.undo();
-        if (value >= bestMove) {
-        bestMove = value;
-        bestMoveFound = newGameMove;
-        }
-        }
-        return bestMoveFound;
-        };"""
