@@ -101,8 +101,7 @@ def process(initmove):
     return (retu[1],initmove,retu[2])
 
 pool = mp.Pool(processes=3)
-results = [pool.apply_async(process, args=(initmove,)) for initmove in board.generate_legal_moves()]
-outputs = [p.get() for p in results]
+outputs = [pool.apply(process, args=(initmove,)) for initmove in board.generate_legal_moves()]
 with open("opbook-antichess-depth6","w") as opbook:
     for j in outputs:
         opbook.write("{0} {1} {2}\n".format(j[0], str(j[1]), str(j[2])))
