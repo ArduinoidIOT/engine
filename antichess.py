@@ -1,6 +1,9 @@
 from chess import variant as chess
-
+from datetime import datetime
 board= chess.SuicideBoard()
+
+def load_opening_book():
+    with
 def getMoves():
     movelist = []
     for i in board.generate_legal_moves():
@@ -49,7 +52,7 @@ def minimax(depth,alpha,beta, isWhite):
     goodevalm = None
     if isWhite:
         goodevalm = 99999
-        for i in mover:
+        for i in getMoves():
             board.push(i)
             goodevalm = min(goodevalm, minimax(depth - 1,alpha,beta,not isWhite))
             board.pop()
@@ -58,13 +61,16 @@ def minimax(depth,alpha,beta, isWhite):
                 return goodevalm
     else:
         goodevalm = -99999
-        for i in mover:
+        for i in getMoves():
             board.push(i)
             goodevalm = max(goodevalm, minimax(depth - 1, alpha,beta, not isWhite))
             board.pop()
             beta = min(beta, goodevalm)
             if alpha >= beta:
                 return goodevalm
+
+    if depth %2 ==0:
+        print ("depth  " + str(depth) + "done")
     return goodevalm
 def minimaxRoot(depth, isWhite=False):
     mRmoves = getMoves()
@@ -81,7 +87,10 @@ def minimaxRoot(depth, isWhite=False):
             bestMoveFound = i
     return bestMoveFound
 def getBestmove():
-    ans = minimaxRoot(4)
+    strt = datetime.now()
+    ans = minimaxRoot(6)
+    stp = datetime.now()
+    print (stp-strt)
     return ans
 while not board.is_game_over():
     move = str(input("Your move:"))
