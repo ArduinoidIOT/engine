@@ -1,7 +1,4 @@
 from chess import variant as chess
-import multiprocessing as mp
-from datetime import datetime
-
 board= chess.SuicideBoard()
 def getMoves():
     movelist = []
@@ -56,7 +53,10 @@ def minimax(depth, alpha, beta, isWhite):
             board.push(i)
             goodevalm = min(goodevalm, minimax(depth - 1, alpha, beta, not isWhite))
             board.pop()
+<<<<<<< HEAD
             #print (i,goodevalm)
+=======
+>>>>>>> d0ebebd371f635b3341f539a69e961b15c33004c
             alpha = min(alpha, goodevalm)
             if alpha >= beta:
                 return goodevalm
@@ -69,7 +69,12 @@ def minimax(depth, alpha, beta, isWhite):
             beta = min(beta, goodevalm)
             if alpha >= beta:
                 return goodevalm
+<<<<<<< HEAD
     print ("depth {0} done".format(depth))
+=======
+    if depth >=4:
+        print ("depth  " + str(depth) + " done")
+>>>>>>> d0ebebd371f635b3341f539a69e961b15c33004c
     return goodevalm
 
 
@@ -93,16 +98,11 @@ def getBestmove():
 
     ans = minimaxRoot(6)
     return ans
-def process(initmove):
-    myboard = chess.SuicideBoard()
-    myboard.push(initmove)
-    retu = getBestmove()
-    myboard.pop()
-    print ("{0} {1} {2}".format(retu[1], initmove, str(retu[0])))
-    return (retu[1],initmove,retu[2])
+with open("opening-book-antichess-depth6" ,'w') as opbook:
+    for i in getMoves():
+        board.push(i)
+        ret = getBestmove()
+        board.pop()
+        print ("{0} {1} {2}".format(ret[1], i, str(ret[0])))
+        opbook.write("{0} {1} {2}\n".format(ret[1], i, str(ret[0])))
 
-pool = mp.Pool(processes=3)
-outputs = [pool.apply(process, args=(initmove,)) for initmove in board.generate_legal_moves()]
-with open("opbook-antichess-depth6","w") as opbook:
-    for j in outputs:
-        opbook.write("{0} {1} {2}\n".format(j[0], str(j[1]), str(j[2])))
