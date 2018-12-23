@@ -56,7 +56,7 @@ def minimax(depth, alpha, beta, isWhite):
             board.push(i)
             goodevalm = min(goodevalm, minimax(depth - 1, alpha, beta, not isWhite))
             board.pop()
-            print (i,goodevalm)
+            #print (i,goodevalm)
             alpha = min(alpha, goodevalm)
             if alpha >= beta:
                 return goodevalm
@@ -69,6 +69,7 @@ def minimax(depth, alpha, beta, isWhite):
             beta = min(beta, goodevalm)
             if alpha >= beta:
                 return goodevalm
+    print ("depth {0} done".format(depth))
     return goodevalm
 
 
