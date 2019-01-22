@@ -89,9 +89,9 @@ def minimaxRoot(depth, isWhite=False):
     return (bestMoveFound,betterEval)
 def getBestmove():
 
-    ans = minimaxRoot(7)
+    ans = minimaxRoot(6)
     return ans
-with open("opening-book-antichess-depth7" ,'w') as opbook:
+with open("opening-book-antichess-depth6" ,'w') as opbook:
     for i in getMoves():
         board.push(i)
         ret = getBestmove()

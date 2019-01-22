@@ -1,7 +1,7 @@
 import chess
-
-board = chess.Board()
-
+import multiprocessing as mp
+board = chess.Board(fen="7r/p3ppk1/3p4/2p1P1Kp/2Pb4/3P1QPq/PP5P/R6R b - - 0 1")
+print (board)
 
 def getMoves():
     movelist = []
@@ -53,7 +53,9 @@ def getBestmove():
 
 
 def minimax(depth, alpha, beta, isWhite):
-    if depth == 0 or board.is_checkmate():
+    if board.is_checkmate():
+        return evalPos()*10000/(depth+1)
+    if depth == 0 :
         return evalPos()
     mover = getMoves()
     global goodevalm
@@ -78,7 +80,12 @@ def minimax(depth, alpha, beta, isWhite):
             if beta <= alpha:
                 return goodevalm
     return goodevalm
-
+def dowork(move,depth,isWhite):
+    board.push(move)
+    value = minimax(depth - 1, -10000, 10000, not isWhite)
+    board.pop()
+    return move,value
+#pool = mp.Pool(processes=2)
 
 def minimaxRoot(depth, isWhite=False):
     mRmoves = getMoves()
@@ -87,49 +94,51 @@ def minimaxRoot(depth, isWhite=False):
     global bestMoveFound
     bestMoveFound = mRmoves[0]
     for i in mRmoves:
-        board.push(i)
-        value = minimax(depth - 1, -10000, 10000, not isWhite)
-        board.pop()
+        temp=dowork(i,depth,isWhite)
+        value = temp[1]
+        move=temp[0]
         if value > betterEval:
             betterEval = value
-            bestMoveFound = i
+            bestMoveFound = move
     return bestMoveFound
 
-
+global move
+move = '0000'
 while not board.is_game_over():
-    move = str(input("Your move:"))
-    moves = getMoves()
-    if move.lower() != 'undo':
-        try:
-            board.parse_san(move)
-        except:
-            print("Invalid move")
-            while True:
-                move = str(input("Your move:"))
-                if move.lower() != 'undo':
-                    try:
-                        board.parse_san(move)
+    if len(board.stack) % 2:
+        move = str(input("Your move:"))
+        moves = getMoves()
+        if move.lower() != 'undo':
+            try:
+                board.parse_san(move)
+            except:
+                print("Invalid move")
+                while True:
+                    move = str(input("Your move:"))
+                    if move.lower() != 'undo':
+                        try:
+                            board.parse_san(move)
+                            break
+                        except:
+                            print("Invalid move")
+                    else:
                         break
-                    except:
-                        print("Invalid move")
-                else:
-                    break
-    print()
-    if move.lower() != 'undo':
-        board.push_san(move)
-    else:
-        board.pop()
-        board.pop()
+        print()
+        if move.lower() != 'undo':
+            board.push_san(move)
+        else:
+            board.pop()
+            board.pop()
 
     print(board)
+    if len(board.stack) % 2  == 0:
+        if not board.is_game_over() and move.lower() != 'undo':
+            moves = getMoves()
+            move = getBestmove()
+            board.push(move)
 
-    if not board.is_game_over() and move.lower() != 'undo':
-        moves = getMoves()
-        move = getBestmove()
-        board.push(move)
-
-        print()
-        print(board)
+            print()
+            print(board)
 if board.is_stalemate():
     print("1/2-1/2 draw")
 else:
